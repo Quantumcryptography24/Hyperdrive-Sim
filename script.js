@@ -163,7 +163,7 @@ function animate() {
   if (isSlowMode || (wasSlowMode && !isIdle)) {
     speed += (2 - speed) * 0.04;
     mouseLerp = 0.005;
-    targetGlassBoost = 1;
+    targetGlassBoost = 0.16;
     targetStretch = 60;
     targetWhiteBlend = 1;
   } else if (recoveryState === 1) {
@@ -173,7 +173,7 @@ function animate() {
 
     speed = releaseSpeed + (140 - releaseSpeed) * ease;
     targetStretch = 60 * (1 - ease);
-    targetGlassBoost = 1;
+    targetGlassBoost = 0.16;
     mouseLerp = 0.005 + 0.055 * ease;
 
     if (t < 0.7) {
@@ -196,12 +196,10 @@ function animate() {
     targetWhiteBlend = 0;
     mouseLerp = 0.06 + 0.04 * ease;
 
-    if (t < 0.35) {
-      targetGlassBoost = 1;
-    } else if (t < 0.85) {
-      targetGlassBoost = 1 - smootherstep((t - 0.35) / 0.5);
+    if (t < 0.5) {
+      targetGlassBoost = 0.16;
     } else {
-      targetGlassBoost = 0;
+      targetGlassBoost = 0.16 * (1 - smootherstep((t - 0.5) / 0.5));
     }
 
     if (transitionTimer <= 0) {
@@ -220,12 +218,7 @@ function animate() {
   slowMouseY += (mouseY - slowMouseY) * mouseLerp;
   slowStretch += (targetStretch - slowStretch) * 0.18;
   whiteBlend += (targetWhiteBlend - whiteBlend) * 0.25;
-
-  if (targetGlassBoost === 1) {
-    glassBoost += (1 - glassBoost) * 0.35;
-  } else {
-    glassBoost += (targetGlassBoost - glassBoost) * 0.12;
-  }
+  glassBoost += (targetGlassBoost - glassBoost) * 0.08;
 
   centerX += (slowMouseX - centerX) * 0.05;
   centerY += (slowMouseY - centerY) * 0.05;
